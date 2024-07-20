@@ -1,0 +1,2 @@
+# Orr-Sommerfeld-Squire-Turbulent-Kinetic-Energy-Equation-
+Apart from the traditional turbulent kinetic energy (TKE) equation expressed using all three velocities (streamwise, spanwise and wall-normal velocities), we can derive another TKE equation using wall-normal velocity and wall-normal vorticity for incompressible flows. The new TKE equation is derived from the Orr-Sommerfeld and Squire equations.  
