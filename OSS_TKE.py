@@ -10,23 +10,23 @@ import numpy as np
 
 def get_Orr_Sommerfeld_terms(w_F,fx_F,fy_F,fz_F,kx,ky,U,d2Udz2,L,L2,D1,Retau,nz):
 
-    first_term = np.linalg.solve(L, (-1j * kx * np.diag(U[1:-1]) @ L) @ w_F * np.conj(w_F)) + \
-                 np.linalg.solve(L, (1j * kx * np.diag(U[1:-1]) @ L) @ np.conj(w_F) * w_F)
+    first_term = np.linalg.solve(L, (-1j * kx * np.diag(U[1:-1]) @ L)) @ w_F * np.conj(w_F) + \
+                 np.linalg.solve(L, (1j * kx * np.diag(U[1:-1]) @ L)) @ np.conj(w_F) * w_F
     
-    second_term = np.linalg.solve(L, (1j * kx * np.diag(d2Udz2)) @ w_F * np.conj(w_F)) + \
-                  np.linalg.solve(L, (-1j * kx * np.diag(d2Udz2)) @ np.conj(w_F) * w_F)
+    second_term = np.linalg.solve(L, (1j * kx * np.diag(d2Udz2))) @ w_F * np.conj(w_F) + \
+                  np.linalg.solve(L, (-1j * kx * np.diag(d2Udz2))) @ np.conj(w_F) * w_F
     
-    third_term = np.linalg.solve(L, (L2 / Retau) @ w_F * np.conj(w_F)) + \
-                 np.linalg.solve(L, (L2 / Retau) @ np.conj(w_F) * w_F)
+    third_term = np.linalg.solve(L, (L2 / Retau)) @ w_F * np.conj(w_F) + \
+                 np.linalg.solve(L, (L2 / Retau)) @ np.conj(w_F) * w_F
     
-    fourth_term = np.linalg.solve(L, (-1j * kx * D1) @ fx_F * np.conj(w_F)) + \
-                  np.linalg.solve(L, (1j * kx * D1) @ np.conj(fx_F) * w_F)
+    fourth_term = np.linalg.solve(L, (-1j * kx * D1)) @ fx_F * np.conj(w_F) + \
+                  np.linalg.solve(L, (1j * kx * D1)) @ np.conj(fx_F) * w_F
     
-    fifth_term = np.linalg.solve(L, (-1j * ky * D1) @ fy_F * np.conj(w_F)) + \
-                 np.linalg.solve(L, (1j * ky * D1) @ np.conj(fy_F) * w_F)
+    fifth_term = np.linalg.solve(L, (-1j * ky * D1)) @ fy_F * np.conj(w_F) + \
+                 np.linalg.solve(L, (1j * ky * D1)) @ np.conj(fy_F) * w_F
     
-    sixth_term = np.linalg.solve(L, (-(kx**2 + ky**2) * np.eye(nz-1)) @ fz_F * np.conj(w_F)) + \
-                 np.linalg.solve(L, (-(kx**2 + ky**2) * np.eye(nz-1)) @ np.conj(fz_F) * w_F)
+    sixth_term = np.linalg.solve(L, (-(kx**2 + ky**2) * np.eye(nz-1))) @ fz_F * np.conj(w_F) + \
+                 np.linalg.solve(L, (-(kx**2 + ky**2) * np.eye(nz-1))) @ np.conj(fz_F) * w_F
     
     first_term  /= 2
     second_term /= 2
@@ -42,23 +42,23 @@ def get_Orr_Sommerfeld_terms(w_F,fx_F,fy_F,fz_F,kx,ky,U,d2Udz2,L,L2,D1,Retau,nz)
 
 def get_Orr_Sommerfeld_D_terms(w_F,fx_F,fy_F,fz_F,kx,ky,U,d2Udz2,L,L2,D1,Retau,nz):
 
-    first_term = (D1 @ np.linalg.solve(L, (-1j * kx * np.diag(U[1:-1]) @ L) @ w_F * (D1 @ np.conj(w_F))) +
-                  D1 @ np.linalg.solve(L, (1j * kx * np.diag(U[1:-1]) @ L) @ np.conj(w_F) * (D1 @ w_F)))
+    first_term = (D1 @ np.linalg.solve(L, (-1j * kx * np.diag(U[1:-1]) @ L)) @ w_F * (D1 @ np.conj(w_F)) +
+                  D1 @ np.linalg.solve(L, (1j * kx * np.diag(U[1:-1]) @ L)) @ np.conj(w_F) * (D1 @ w_F))
     
-    second_term = (D1 @ np.linalg.solve(L, (1j * kx * np.diag(d2Udz2)) @ w_F * (D1 @ np.conj(w_F))) +
-                   D1 @ np.linalg.solve(L, (-1j * kx * np.diag(d2Udz2)) @ np.conj(w_F) * (D1 @ w_F)))
+    second_term = (D1 @ np.linalg.solve(L, (1j * kx * np.diag(d2Udz2))) @ w_F * (D1 @ np.conj(w_F)) +
+                   D1 @ np.linalg.solve(L, (-1j * kx * np.diag(d2Udz2))) @ np.conj(w_F) * (D1 @ w_F))
     
-    third_term = (D1 @ np.linalg.solve(L, (L2 / Retau) @ w_F * (D1 @ np.conj(w_F))) +
-                  D1 @ np.linalg.solve(L, (L2 / Retau) @ np.conj(w_F) * (D1 @ w_F)))
+    third_term = (D1 @ np.linalg.solve(L, (L2 / Retau)) @ w_F * (D1 @ np.conj(w_F)) +
+                  D1 @ np.linalg.solve(L, (L2 / Retau)) @ np.conj(w_F) * (D1 @ w_F))
     
-    fourth_term = (D1 @ np.linalg.solve(L, (-1j * kx * D1) @ fx_F * (D1 @ np.conj(w_F))) +
-                   D1 @ np.linalg.solve(L, (1j * kx * D1) @ np.conj(fx_F) * (D1 @ w_F)))
+    fourth_term = (D1 @ np.linalg.solve(L, (-1j * kx * D1)) @ fx_F * (D1 @ np.conj(w_F)) +
+                   D1 @ np.linalg.solve(L, (1j * kx * D1)) @ np.conj(fx_F) * (D1 @ w_F))
     
-    fifth_term = (D1 @ np.linalg.solve(L, (-1j * ky * D1) @ fy_F * (D1 @ np.conj(w_F))) +
-                  D1 @ np.linalg.solve(L, (1j * ky * D1) @ np.conj(fy_F) * (D1 @ w_F)))
+    fifth_term = (D1 @ np.linalg.solve(L, (-1j * ky * D1)) @ fy_F * (D1 @ np.conj(w_F)) +
+                  D1 @ np.linalg.solve(L, (1j * ky * D1)) @ np.conj(fy_F) * (D1 @ w_F))
     
-    sixth_term = (D1 @ np.linalg.solve(L, (-(kx**2 + ky**2) * np.eye(nz-1)) @ fz_F * (D1 @ np.conj(w_F))) +
-                  D1 @ np.linalg.solve(L, (-(kx**2 + ky**2) * np.eye(nz-1)) @ np.conj(fz_F) * (D1 @ w_F)))
+    sixth_term = (D1 @ np.linalg.solve(L, (-(kx**2 + ky**2) * np.eye(nz-1))) @ fz_F * (D1 @ np.conj(w_F)) +
+                  D1 @ np.linalg.solve(L, (-(kx**2 + ky**2) * np.eye(nz-1))) @ np.conj(fz_F) * (D1 @ w_F))
     
     kx_ky_sq = kx**2 + ky**2
     first_term  /= 2 * kx_ky_sq
@@ -98,4 +98,3 @@ def get_Squire_terms(u_F,v_F,w_F,fx_F,fy_F,kx,ky,U,dUdz,L,D1,Retau,nz):
     fifth_term  /= 2 * kx_ky_sq
     
     return first_term, second_term, third_term, fourth_term, fifth_term
-
