@@ -22,6 +22,9 @@ def calculate_OSS_TKE_one_wavenumber(kx_index,ky_index,read_array,nx,ny,nz,nx_d,
     ky = ky_m[ky_index,kx_index]
     print(f"{kx}+{ky}")
     
+    if kx == 0 and ky == 0:
+        return
+    
     L  = D2 - (kx**2 + ky**2) * np.eye(nz-1)
     L2 = D4 + (kx**2 + ky**2)**2 * np.eye(nz-1) - 2 * (kx**2 + ky**2) * D2
     
@@ -52,6 +55,7 @@ def calculate_OSS_TKE_one_wavenumber(kx_index,ky_index,read_array,nx,ny,nz,nx_d,
     
     for k_array in range(len(read_array)):
         filename = f"data180/uTot/U{read_array[k_array]}.nc"
+        # filename = f"U{read_array[k_array]}.nc"
         
         x,y,z,u,v,w = get_xyzuvw_channelflow(filename)
         
@@ -114,6 +118,7 @@ def calculate_OSS_TKE_one_wavenumber(kx_index,ky_index,read_array,nx,ny,nz,nx_d,
         
         for k_array in range(len(read_array)):
             filename = f"data180/uTot/U{read_array[k_array]}.nc"
+            # filename = f"U{read_array[k_array]}.nc"
             
             x,y,z,u,v,w = get_xyzuvw_channelflow(filename)
             
@@ -175,19 +180,20 @@ def calculate_OSS_TKE_one_wavenumber(kx_index,ky_index,read_array,nx,ny,nz,nx_d,
 
 if __name__ == '__main__':
 
-    kx_index = int(sys.argv[1])
-    ky_index = int(sys.argv[2])
-    read_array_start = int(sys.argv[3])
-    read_array_end   = int(sys.argv[4])
-    workers  = int(sys.argv[5])
+    read_array_start = int(sys.argv[1])
+    read_array_end   = int(sys.argv[2])
+    workers  = int(sys.argv[3])
+    # read_array_start = 100
+    # read_array_end   = 100
+    # workers          = 2
     Retau = 180
     nx = 74
     ny = 74
     nz = 128
     dkx = 1
     dky = 2
-    nx_d = 32
-    ny_d = 32
+    nx_d = 3
+    ny_d = 3
     
     D, z = cheb(nz)
     D1 = D[1:-1, 1:-1]  
@@ -205,6 +211,69 @@ if __name__ == '__main__':
     with mp.Pool(processes=workers) as pool:
         results = pool.starmap(calculate_OSS_TKE_one_wavenumber,[(kx_index,ky_index,read_array,nx,ny,nz,nx_d,ny_d,dkx,dky,D1,D2,D4,Retau) for kx_index in range(nx_d) for ky_index in range(ny_d)])
     
+    
+    OS_first_dict  = {}
+    OS_second_dict = {}
+    OS_third_dict = {}
+    OS_fourth_dict = {}
+    OS_fifth_dict  = {}
+    OS_sixth_dict  = {}
+    OSD_first_dict  = {}
+    OSD_second_dict = {}
+    OSD_third_dict  = {}
+    OSD_fourth_dict = {}
+    OSD_fifth_dict  = {}
+    OSD_sixth_dict  = {}
+    S_first_dict  = {}
+    S_second_dict = {}
+    S_third_dict = {}
+    S_fourth_dict = {}
+    S_fifth_dict  = {}
+    
+    for k_index in range(len(results)):
+        try:
+            OS_first_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][2]
+            OS_second_dict[(results[k_index][0],results[k_index][1])] = results[k_index][3]
+            OS_third_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][4]
+            OS_fourth_dict[(results[k_index][0],results[k_index][1])] = results[k_index][5]
+            OS_fifth_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][6]
+            OS_sixth_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][7]
+            OSD_first_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][8]
+            OSD_second_dict[(results[k_index][0],results[k_index][1])] = results[k_index][9]
+            OSD_third_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][10]
+            OSD_fourth_dict[(results[k_index][0],results[k_index][1])] = results[k_index][11]
+            OSD_fifth_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][12]
+            OSD_sixth_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][13]
+            S_first_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][14]
+            S_second_dict[(results[k_index][0],results[k_index][1])] = results[k_index][15]
+            S_third_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][16]
+            S_fourth_dict[(results[k_index][0],results[k_index][1])] = results[k_index][17]
+            S_fifth_dict[(results[k_index][0],results[k_index][1])]  = results[k_index][18]
+        except:
+            print('(0,0)')
+        
+    
+    savename = f'OSS_TKE_allwavenumbers.npz'
+    np.savez(savename,
+             z=z,
+             OS_first_dict=OS_first_dict,
+             OS_second_dict=OS_second_dict,
+             OS_third_dict=OS_third_dict,
+             OS_fourth_dict=OS_fourth_dict,
+             OS_fifth_dict=OS_fifth_dict,
+             OS_sixth_dict=OS_sixth_dict,
+             OSD_first_dict=OSD_first_dict,
+             OSD_second_dict=OSD_second_dict,
+             OSD_third_dict=OSD_third_dict,
+             OSD_fourth_dict=OSD_fourth_dict,
+             OSD_fifth_dict=OSD_fifth_dict,
+             OSD_sixth_dict=OSD_sixth_dict,
+             S_first_dict=S_first_dict,
+             S_second_dict=S_second_dict,
+             S_third_dict=S_third_dict,
+             S_fourth_dict=S_fourth_dict,
+             S_fifth_dict=S_fifth_dict,
+             )
 
     savename = f'OSS_TKE_allwavenumbers.npz'
     np.savez(savename,z,results)
